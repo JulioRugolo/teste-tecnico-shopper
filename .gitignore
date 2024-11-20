@@ -1,0 +1,7 @@
+# Ignorar arquivos de variáveis de ambiente
+.env
+
+# Dependências do Node.js (frontend e backend)
+frontend/node_modules/
+backend/node_modules/
+
