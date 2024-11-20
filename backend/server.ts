@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // Importing Routes
-const routes = require('./routes/exampleRoutes');
+import rideRoutes from './routes/rideRoutes';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -12,7 +12,7 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api', routes);
+app.use('/api/ride', rideRoutes);
 
 // Starting server
 app.listen(port, () => {
