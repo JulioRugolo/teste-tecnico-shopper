@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const env = require('dotenv');
+
+// Config environment variables
+env.config();
 
 // Importing Routes
 import rideRoutes from './routes/rideRoutes';
