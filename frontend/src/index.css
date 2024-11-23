@@ -1,13 +1,166 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Reset global */
+* {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Global styling */
+button {
+  cursor: pointer;
+  background-color: cornflowerblue;
+  flex: 1;
+  width: 100%;
+  max-width: 150px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #3f51b5;
+  transform: scale(1.05);
+}
+
+/* General input styling */
+input[type="text"], input[type="email"], input[type="password"] {
+  flex: 1;
+  max-width: 300px;
+  min-width: 200px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+input:focus {
+  border: 1px solid cornflowerblue;
+  outline: none;
+}
+
+/* Label styling */
+label {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+/* Headings */
+h1, h2, h3 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Lists */
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex: 1;
+  max-width: 300px;
+  min-width: 250px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Containers */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  button {
+    max-width: 100%;
+    height: 45px;
+    font-size: 1em;
+  }
+
+  input {
+    max-width: 100%;
+    font-size: 1em;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  main {
+    padding: 10px;
+  }
+
+  ul {
+    gap: 10px;
+  }
+
+  li {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  button {
+    height: 50px;
+    font-size: 1.2em;
+  }
+
+  input {
+    font-size: 1em;
+    height: 45px;
+  }
+
+  h1 {
+    font-size: 1.3em;
+  }
+
+  ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  li {
+    min-width: 90%;
+    max-width: 100%;
+  }
 }

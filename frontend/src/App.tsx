@@ -12,12 +12,12 @@ const App = () => {
   };
 
   return (
-    <div>
+    <main>
       {stage === "solicitar" && (
         <SolicitarViagem onSubmit={handleSubmitSolicitacao} />
       )}
       {stage === "opcoes" && <OpcoesViagem data={data} />}
-    </div>
+    </main>
   );
 };
 
