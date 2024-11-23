@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Importar o pacote cors
 const env = require('dotenv');
 
 // Config environment variables
@@ -14,6 +15,7 @@ const port = process.env.PORT || 8080;
 
 // Middlewares
 app.use(bodyParser.json());
+app.use(cors()); // Ativar o CORS para todas as rotas
 
 // Routes
 app.use('/api/ride', rideRoutes);

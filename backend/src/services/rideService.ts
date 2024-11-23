@@ -19,8 +19,6 @@ export const calculateRoute = async (origin: string, destination: string) => {
       key: googleApiKey,
     },
   });
-
-  console.log(response);
   
 
   if (response.status !== 200 || !response.data.routes.length) {

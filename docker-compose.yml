@@ -27,6 +27,8 @@ services:
       - ./frontend:/app
     stdin_open: true
     tty: true
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
 
   mysql:
     image: mysql:8.0
