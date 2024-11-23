@@ -11,12 +11,18 @@ const App = () => {
     setStage("opcoes");
   };
 
+  const handleBackToSolicitacao = () => {
+    setStage("solicitar");
+  };
+
   return (
     <main>
       {stage === "solicitar" && (
         <SolicitarViagem onSubmit={handleSubmitSolicitacao} />
       )}
-      {stage === "opcoes" && <OpcoesViagem data={data} />}
+      {stage === "opcoes" && (
+        <OpcoesViagem data={data} onBack={handleBackToSolicitacao} />
+      )}
     </main>
   );
 };

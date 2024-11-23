@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import "./SolicitarViagem.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 interface Props {
   onSubmit: (data: any) => void;
 }
 
-const SolicitarViagem: React.FC<Props> = ({ onSubmit }) => {
+const SolicitarViagem = ({ onSubmit }: Props) => {
   const [customerId, setCustomerId] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -21,43 +23,53 @@ const SolicitarViagem: React.FC<Props> = ({ onSubmit }) => {
       });
 
       onSubmit(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao estimar viagem:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao estimar viagem",
+        text: error.response?.data?.message || "Ocorreu um erro inesperado. Tente novamente.",
+        confirmButtonColor: "#3f51b5",
+      });
     }
   };
 
   return (
-    <div>
-      <h1>Solicitar Viagem</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>ID do Cliente:</label>
+    <div className="solicitar-container">
+      <h1 className="solicitar-title">Solicitar Viagem</h1>
+      <form className="solicitar-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="customerId">Nome:</label>
           <input
+            id="customerId"
             type="text"
             value={customerId}
             onChange={(e) => setCustomerId(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Origem:</label>
+        <div className="form-group">
+          <label htmlFor="origin">Origem:</label>
           <input
+            id="origin"
             type="text"
             value={origin}
             onChange={(e) => setOrigin(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Destino:</label>
+        <div className="form-group">
+          <label htmlFor="destination">Destino:</label>
           <input
+            id="destination"
             type="text"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Estimar Viagem</button>
+        <button className="submit-button" type="submit">Estimar Viagem</button>
       </form>
     </div>
   );

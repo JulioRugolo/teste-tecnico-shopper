@@ -28,7 +28,7 @@ services:
     stdin_open: true
     tty: true
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - REACT_APP_GOOGLE_API_KEY=${GOOGLE_API_KEY}
 
   mysql:
     image: mysql:8.0
