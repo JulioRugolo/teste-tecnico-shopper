@@ -31,7 +31,7 @@ module.exports = {
         allowNull: false,
       },
       review: {
-        type: Sequelize.JSON, // Campo JSON para armazenar avaliação
+        type: Sequelize.JSON,
         allowNull: false,
       },
       createdAt: {

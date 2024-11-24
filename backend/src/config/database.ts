@@ -1,8 +1,4 @@
 import { Sequelize } from "sequelize";
-import { exec } from "child_process";
-import util from "util";
-
-const execPromise = util.promisify(exec);
 
 console.log("Database Config:", {
   DB_NAME: process.env.DB_NAME,
@@ -28,19 +24,8 @@ const sequelize = new Sequelize(
   try {
     await sequelize.authenticate();
     console.log("Conexão com o banco de dados estabelecida com sucesso!");
-
-    // Executar migrations
-    console.log("Executando migrations...");
-    await execPromise("npx sequelize-cli db:migrate");
-    console.log("Migrations executadas com sucesso!");
-
-    // Executar seeds
-    console.log("Executando seeds...");
-    await execPromise("npx sequelize-cli db:seed:all");
-    console.log("Seeds executadas com sucesso!");
-
   } catch (error: any) {
-    console.error("Erro ao configurar o banco de dados:", error.message);
+    console.error("Erro ao conectar com o banco de dados:", error.message);
     process.exit(1); // Encerre o processo em caso de erro
   }
 })();
