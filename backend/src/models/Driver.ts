@@ -46,7 +46,7 @@ class Driver extends Model {
         sequelize,
         modelName: 'Driver',
         tableName: 'Drivers',
-        timestamps: true, // createdAt e updatedAt
+        timestamps: true,
       }
     );
     return Driver;

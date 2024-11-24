@@ -1,16 +1,13 @@
 require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const env = require('dotenv');
-import util from "util";
-import { exec } from "child_process";
-import './config/database';
-
-env.config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import util from 'util';
+import { exec } from 'child_process';
+import sequelize from './config/connection';
 
 const app = express();
 const port = process.env.PORT || 8080;
+const cors = require('cors');
 
 // Middlewares
 app.use(bodyParser.json());
@@ -18,8 +15,9 @@ app.use(cors());
 
 // Routes
 import rideRoutes from './routes/rideRoutes';
+import driverRoutes from './routes/driverRoutes';
 app.use('/api/ride', rideRoutes);
-
+app.use('/api/drivers', driverRoutes);
 
 // Execute migrations and seeds
 const runMigrationsAndSeeds = async () => {
@@ -42,11 +40,23 @@ const runMigrationsAndSeeds = async () => {
   }
 };
 
+// Test database connection
+const testDatabaseConnection = async () => {
+  try {
+    await sequelize.authenticate();
+  } catch (error: any) {
+    console.error('Erro ao conectar com o banco de dados:', error.message);
+    process.exit(1);
+  }
+};
 
 // Server Start
 (async () => {
   try {
+    await testDatabaseConnection();
     await runMigrationsAndSeeds();
+
+    // Start server
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);
     });
@@ -55,6 +65,3 @@ const runMigrationsAndSeeds = async () => {
     process.exit(1);
   }
 })();
-
-
-
