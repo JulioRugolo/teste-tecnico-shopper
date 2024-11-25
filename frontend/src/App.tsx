@@ -8,10 +8,15 @@ const App = () => {
   const [customerId, setCustomerId] = useState<string>("");
 
   const handleSubmitSolicitacao = (responseData: any) => {
-    const generatedCustomerId = responseData.customerId || String(Math.floor(Math.random() * 10000));
-    setData(responseData);
-    setCustomerId(generatedCustomerId);
-    setStage("opcoes");
+    if (responseData?.options?.length > 0) {
+      const generatedCustomerId =
+        responseData.customerId || String(Math.floor(Math.random() * 10000));
+      setData(responseData);
+      setCustomerId(generatedCustomerId);
+      setStage("opcoes");
+    } else {
+      alert("Nenhum motorista disponível para essa viagem.");
+    }
   };
 
   const handleBackToSolicitacao = () => {

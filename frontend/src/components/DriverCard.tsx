@@ -1,7 +1,6 @@
-import React from "react";
 import axios from "axios";
-import "./DriverCard.css";
 import Swal from "sweetalert2";
+import "./DriverCard.css";
 
 interface Props {
   driver: {
@@ -18,21 +17,25 @@ interface Props {
     destination: string;
     distance: number;
     duration: string;
-  }; // Adiciona detalhes da viagem como prop
+  };
+  onConfirm: () => void;
 }
 
-const DriverCard: React.FC<Props> = ({ driver, rideDetails }) => {
+const DriverCard: React.FC<Props> = ({ driver, rideDetails, onConfirm }) => {
   const handleChooseDriver = async () => {
     try {
-      const response = await axios.patch("http://localhost:8080/api/ride/confirm", {
-        customer_id: rideDetails.customer_id,
-        origin: rideDetails.origin,
-        destination: rideDetails.destination,
-        distance: rideDetails.distance,
-        duration: rideDetails.duration,
-        driver: { id: driver.id, name: driver.name },
-        value: driver.value,
-      });
+      const response = await axios.patch(
+        "http://localhost:8080/api/ride/confirm",
+        {
+          customer_id: rideDetails.customer_id,
+          origin: rideDetails.origin,
+          destination: rideDetails.destination,
+          distance: rideDetails.distance,
+          duration: rideDetails.duration,
+          driver: { id: driver.id, name: driver.name },
+          value: driver.value,
+        }
+      );
 
       if (response.status === 200) {
         await Swal.fire({
@@ -40,6 +43,8 @@ const DriverCard: React.FC<Props> = ({ driver, rideDetails }) => {
           title: "Viagem confirmada!",
           text: "Aproveite sua viagem!",
         });
+
+        onConfirm();
       }
     } catch (error: any) {
       console.error("Erro ao confirmar a viagem:", error.message || error);

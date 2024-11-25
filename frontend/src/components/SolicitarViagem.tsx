@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./SolicitarViagem.css";
 import axios from "axios";
 import Swal from "sweetalert2";
+import "./SolicitarViagem.css";
 
 interface Props {
   onSubmit: (data: any) => void;
@@ -16,20 +16,29 @@ const SolicitarViagem = ({ onSubmit }: Props) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8080/api/ride/estimate", {
-        customer_id: customerId,
-        origin: origin,
-        destination: destination,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/ride/estimate",
+        {
+          customer_id: customerId,
+          origin: origin,
+          destination: destination,
+        }
+      );
 
-      onSubmit(response.data);
+      if (response.data?.options?.length > 0) {
+        onSubmit(response.data);
+      } else {
+        throw new Error("Nenhum motorista disponível.");
+      }
     } catch (error: any) {
       console.error("Erro ao estimar viagem:", error);
 
       Swal.fire({
         icon: "error",
         title: "Erro ao estimar viagem",
-        text: error.response?.data?.message || "Ocorreu um erro inesperado. Tente novamente.",
+        text:
+          error.response?.data?.message ||
+          "Ocorreu um erro inesperado. Tente novamente.",
         confirmButtonColor: "#3f51b5",
       });
     }
@@ -69,7 +78,9 @@ const SolicitarViagem = ({ onSubmit }: Props) => {
             required
           />
         </div>
-        <button className="submit-button" type="submit">Estimar Viagem</button>
+        <button className="submit-button" type="submit">
+          Estimar Viagem
+        </button>
       </form>
     </div>
   );

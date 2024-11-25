@@ -1,0 +1,29 @@
+/* HistoricoViagens.css */
+.historico-viagens {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .historico-viagens h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .historico-viagens ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .historico-viagens li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .historico-viagens li div {
+    margin-bottom: 5px;
+  }
+  
