@@ -5,9 +5,12 @@ import OpcoesViagem from "./components/OpcoesViagem";
 const App = () => {
   const [stage, setStage] = useState<"solicitar" | "opcoes">("solicitar");
   const [data, setData] = useState<any>(null);
+  const [customerId, setCustomerId] = useState<string>("");
 
   const handleSubmitSolicitacao = (responseData: any) => {
+    const generatedCustomerId = responseData.customerId || String(Math.floor(Math.random() * 10000));
     setData(responseData);
+    setCustomerId(generatedCustomerId);
     setStage("opcoes");
   };
 
@@ -21,7 +24,11 @@ const App = () => {
         <SolicitarViagem onSubmit={handleSubmitSolicitacao} />
       )}
       {stage === "opcoes" && (
-        <OpcoesViagem data={data} onBack={handleBackToSolicitacao} />
+        <OpcoesViagem
+          data={data}
+          customerId={customerId}
+          onBack={handleBackToSolicitacao}
+        />
       )}
     </main>
   );

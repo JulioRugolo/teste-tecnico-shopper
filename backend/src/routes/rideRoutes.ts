@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTestMessage, estimateRide } from '../controllers/rideController';
+import { getTestMessage, estimateRide, confirmRide } from '../controllers/rideController';
 
 const router = express.Router();
 
@@ -8,5 +8,7 @@ router.get('/', getTestMessage);
 
 // Route to estimate a ride
 router.post('/estimate', estimateRide);
+
+router.patch('/confirm', confirmRide);
 
 export default router;

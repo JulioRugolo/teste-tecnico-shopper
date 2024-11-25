@@ -8,3 +8,13 @@ export const getAllDrivers = async () => {
     throw new Error('Failed to fetch drivers');
   }
 };
+
+export const getDriverById = async (id: number): Promise<any> => {
+  try {
+    const driver = await Driver.findByPk(id);
+    return driver ? driver.toJSON() : null;
+  } catch (error) {
+    console.error('Erro ao buscar motorista por ID:', error);
+    throw new Error('Failed to fetch driver');
+  }
+};

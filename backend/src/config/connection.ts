@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import Driver from '../models/Driver';
+import Ride from '../models/Ride';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ const sequelize = new Sequelize(
   try {
     await sequelize.authenticate();
     Driver.initModel(sequelize);
+    Ride.initModel(sequelize);
     console.log('Conexão com o banco de dados estabelecida com sucesso!');
   } catch (error: any) {
     console.error('Erro ao conectar com o banco de dados:', error.message);

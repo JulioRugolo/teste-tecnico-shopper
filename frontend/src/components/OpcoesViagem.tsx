@@ -14,11 +14,14 @@ interface Props {
       review: { rating: number; comment: string };
       value: number;
     }[];
+    distance: number;
+    duration: string;
   };
+  customerId: string;
   onBack: () => void;
 }
 
-const OpcoesViagem = ({ data, onBack }: Props) => {
+const OpcoesViagem = ({ data, customerId, onBack }: Props) => {
   const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
   try {
@@ -30,9 +33,13 @@ const OpcoesViagem = ({ data, onBack }: Props) => {
         <button onClick={onBack}>Alterar Endereço</button>
         <p>Escolha um motorista para a sua viagem:</p>
         <div className="opcoes-container">
-          <div className="map-container">
-            <iframe title="mapa" src={googleMapsUrl} allowFullScreen></iframe>
-          </div>
+        <div className="map-container">
+  {googleApiKey ? (
+    <iframe title="mapa" src={googleMapsUrl} allowFullScreen></iframe>
+  ) : (
+    <p>Erro ao carregar o mapa. Verifique sua conexão ou tente novamente.</p>
+  )}
+</div>
           <div className="drivers-list">
             {data.options.map((option) => (
               <DriverCard
@@ -44,6 +51,13 @@ const OpcoesViagem = ({ data, onBack }: Props) => {
                   rating: option.review.rating,
                   comment: option.review.comment,
                   value: option.value,
+                }}
+                rideDetails={{
+                  customer_id: customerId,
+                  origin: `${data.origin.latitude},${data.origin.longitude}`,
+                  destination: `${data.destination.latitude},${data.destination.longitude}`,
+                  distance: data.distance,
+                  duration: data.duration,
                 }}
               />
             ))}
