@@ -80,3 +80,16 @@ export const saveRide = async (rideData: {
     throw new Error('Erro ao salvar a viagem no banco de dados.');
   }
 };
+
+// Fetch Ride
+export const fetchRides = async (customer_id: string, driver_id?: string) => {
+  const whereClause: any = { customerId: customer_id };
+  if (driver_id) {
+    whereClause.driverId = driver_id;
+  }
+
+  return await Ride.findAll({
+    where: whereClause,
+    order: [['createdAt', 'DESC']],
+  });
+};

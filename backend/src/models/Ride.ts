@@ -11,6 +11,9 @@ class Ride extends Model {
   public driverName!: string;
   public value!: number;
 
+  public createdAt!: Date;
+  public updatedAt!: Date;
+
   static initModel(sequelize: Sequelize): typeof Ride {
     Ride.init(
       {

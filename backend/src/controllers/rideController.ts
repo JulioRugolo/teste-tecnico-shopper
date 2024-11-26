@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { calculateRoute } from '../services/rideService';
+import { calculateRoute, fetchRides } from '../services/rideService';
 import { getAllDrivers, getDriverById } from '../services/driverService';
 import { saveRide } from '../services/rideService';
+import Ride from '../models/Ride';
 
 export const getTestMessage = (req: Request, res: Response): void => {
   res.send('Ride Routes');
@@ -153,6 +154,67 @@ export const confirmRide = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({
       error_code: 'SERVER_ERROR',
       error_description: 'Erro ao processar a solicitação. Tente novamente mais tarde.',
+    });
+  }
+};
+
+export const getRidesByCustomer = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { customer_id } = req.params;
+    const { driver_id } = req.query;
+
+    // Validações
+    if (!customer_id) {
+      res.status(400).json({
+        error_code: 'INVALID_CUSTOMER',
+        error_description: 'O ID do cliente não pode estar em branco.',
+      });
+      return;
+    }
+
+    if (driver_id && isNaN(Number(driver_id))) {
+      res.status(400).json({
+        error_code: 'INVALID_DRIVER',
+        error_description: 'O ID do motorista deve ser um número válido.',
+      });
+      return;
+    }
+
+    // Search for rides
+    const rides = await fetchRides(customer_id, driver_id as string);
+
+    if (!rides || rides.length === 0) {
+      res.status(404).json({
+        error_code: 'NO_RIDES_FOUND',
+        error_description: 'Nenhuma viagem encontrada para este usuário.',
+      });
+      return;
+    }
+
+    // Response to the client
+    const response = {
+      customer_id,
+      rides: rides.map((ride) => ({
+        id: ride.id,
+        date: ride.createdAt,
+        origin: ride.origin,
+        destination: ride.destination,
+        distance: ride.distance,
+        duration: ride.duration,
+        driver: {
+          id: ride.driverId,
+          name: ride.driverName,
+        },
+        value: ride.value,
+      })),
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Erro ao buscar viagens:', error);
+    res.status(500).json({
+      error_code: 'INTERNAL_SERVER_ERROR',
+      error_description: 'Erro interno do servidor.',
     });
   }
 };
