@@ -57,7 +57,7 @@ const OpcoesViagem = ({ data, customerId, onBack }: Props) => {
         {showHistorico ? "Voltar" : "Alterar Endereço"}
       </button>
       {showHistorico ? (
-        <HistoricoViagens historico={exemploHistorico} />
+        <HistoricoViagens />
       ) : (
         <>
           <p>Escolha um motorista para a sua viagem:</p>
