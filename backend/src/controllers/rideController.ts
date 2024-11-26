@@ -163,7 +163,7 @@ export const getRidesByCustomer = async (req: Request, res: Response): Promise<v
     const { customer_id } = req.params;
     const { driver_id } = req.query;
 
-    // Validações
+    // Validate input data
     if (!customer_id) {
       res.status(400).json({
         error_code: 'INVALID_CUSTOMER',
@@ -180,9 +180,31 @@ export const getRidesByCustomer = async (req: Request, res: Response): Promise<v
       return;
     }
 
-    // Search for rides
-    const rides = await fetchRides(customer_id, driver_id as string);
+    // Validate driver ID
+    if (driver_id) {
+      const driver = await getDriverById(Number(driver_id));
+      if (!driver) {
+        res.status(400).json({
+          error_code: 'INVALID_DRIVER',
+          error_description: 'O ID do motorista fornecido não existe.',
+        });
+        return;
+      }
+    }
 
+    // Build Where 
+    const whereClause: any = { customerId: customer_id };
+    if (driver_id) {
+      whereClause.driverId = driver_id;
+    }
+
+    // Fetch rides
+    const rides = await Ride.findAll({
+      where: whereClause,
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Check if there are rides
     if (!rides || rides.length === 0) {
       res.status(404).json({
         error_code: 'NO_RIDES_FOUND',

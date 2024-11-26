@@ -10,7 +10,7 @@ const App = () => {
   const handleSubmitSolicitacao = (responseData: any) => {
     if (responseData?.options?.length > 0) {
       const generatedCustomerId =
-        responseData.customerId || String(Math.floor(Math.random() * 10000));
+        responseData.customerId || String(1);
       setData(responseData);
       setCustomerId(generatedCustomerId);
       setStage("opcoes");
