@@ -27,25 +27,6 @@ const OpcoesViagem = ({ data, customerId, onBack }: Props) => {
 
   const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
-  const exemploHistorico = [
-    {
-      id: 1,
-      origem: "Rua A, 123",
-      destino: "Av. B, 456",
-      data: "2024-11-22",
-      motorista: "Homer Simpson",
-      valor: 111.11,
-    },
-    {
-      id: 2,
-      origem: "Praça C, 789",
-      destino: "Rua D, 321",
-      data: "2024-11-15",
-      motorista: "Dominic Toretto",
-      valor: 200.45,
-    },
-  ];
-
   const handleViagemConfirmada = () => {
     setShowHistorico(true);
   };
