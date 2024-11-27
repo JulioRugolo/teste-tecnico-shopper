@@ -31,7 +31,6 @@ const SolicitarViagem = ({ onSubmit }: Props) => {
         throw new Error("Nenhum motorista disponível.");
       }
     } catch (error: any) {
-      console.error("Erro ao estimar viagem:", error);
 
       Swal.fire({
         icon: "error",
