@@ -7,4 +7,7 @@ module.exports = {
   moduleNameMapper: {
     '^../services/rideService$': '<rootDir>/src/__mocks__/rideServiceMock.ts',
   },
+  globals: {
+    NODE_ENV: 'test',
+  },
 };

@@ -12,61 +12,18 @@ jest.mock('../services/rideService', () => ({
     duration: '5 hours 39 mins',
     routeResponse: {},
   }),
+  saveRide: jest.fn().mockResolvedValue({
+    id: 1,
+    customerId: 1,
+    origin: 'Origem A',
+    destination: 'Destino A',
+    distance: 446.263,
+    duration: '5 hours 39 mins',
+    driverId: 1,
+    driverName: 'Homer Simpson',
+    value: 1115.6575,
+  }),
 }));
-
-jest.mock('../services/driverService', () => ({
-  getAllDrivers: jest.fn().mockResolvedValue([
-    {
-      id: 1,
-      name: 'Homer Simpson',
-      description: 'Olá! Sou o Homer, seu motorista camarada!',
-      vehicle: 'Plymouth Valiant 1973 rosa e enferrujado',
-      review: {
-        rating: 2,
-        comment: 'Motorista simpático, mas errou o caminho 3 vezes.',
-      },
-      rate: 2.5,
-      minKm: 50,
-    },
-    {
-      id: 2,
-      name: 'Dominic Toretto',
-      description: 'Ei, aqui é o Dom.',
-      vehicle: 'Dodge Charger R/T 1970 modificado',
-      review: {
-        rating: 4,
-        comment: 'Que viagem incrível!',
-      },
-      rate: 5.0,
-      minKm: 100,
-    },
-    {
-      id: 3,
-      name: 'James Bond',
-      description: 'Boa noite, sou James Bond.',
-      vehicle: 'Aston Martin DB5 clássico',
-      review: {
-        rating: 5,
-        comment: 'Serviço impecável!',
-      },
-      rate: 10.0,
-      minKm: 200,
-    },
-  ]),
-}));
-
-export const saveRide = jest.fn().mockResolvedValue({
-  id: 1,
-  customerId: 1,
-  origin: 'Origem A',
-  destination: 'Destino A',
-  distance: 446.263,
-  duration: '5 hours 39 mins',
-  driverId: 1,
-  driverName: 'Homer Simpson',
-  value: 1115.6575,
-});
-
 
 jest.mock('../services/driverService', () => ({
   getAllDrivers: jest.fn().mockResolvedValue([
@@ -89,7 +46,6 @@ jest.mock('../services/driverService', () => ({
       rate: 4.0,
     },
   ]),
-
   getDriverById: jest.fn().mockImplementation((id: number) => {
     const drivers = [
       {
@@ -115,30 +71,6 @@ jest.mock('../services/driverService', () => ({
   }),
 }));
 
-jest.mock('../services/rideService', () => ({
-  saveRide: jest.fn().mockResolvedValue({
-    id: 1,
-    customerId: 1,
-    origin: 'Origem A',
-    destination: 'Destino A',
-    distance: 446.263,
-    duration: '5 hours 39 mins',
-    driverId: 1,
-    driverName: 'Homer Simpson',
-    value: 1115.6575,
-  }),
-  calculateRoute: jest.fn().mockResolvedValue({
-    origin: {
-      latitude: -23.5557813,
-      longitude: -46.6395371,
-    },
-    destination: {
-      latitude: -22.9068576,
-      longitude: -43.1729362,
-    },
-    distance: 446.263,
-    duration: '5 hours 39 mins',
-    routeResponse: {},
-  }),
+jest.mock('../models/Ride', () => ({
+  findAll: jest.fn(),
 }));
-

@@ -164,7 +164,7 @@ export const getRidesByCustomer = async (req: Request, res: Response): Promise<v
     const { driver_id } = req.query;
 
     // Validate input data
-    if (!customer_id) {
+    if (!customer_id || customer_id === 'undefined') {
       res.status(400).json({
         error_code: 'INVALID_CUSTOMER',
         error_description: 'O ID do cliente não pode estar em branco.',

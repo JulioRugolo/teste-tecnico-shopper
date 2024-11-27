@@ -1,25 +1,23 @@
+# Use uma imagem leve do Node.js
 FROM node:18-alpine
 
-# Define o diretório de trabalho
+# Defina o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos de configuração do projeto
-COPY package*.json ./
+# Copie apenas os arquivos essenciais para instalar dependências
+COPY package*.json tsconfig.json ./
 
-# Instala as dependências
+# Instale as dependências
 RUN npm install --legacy-peer-deps
 
-# Instala globalmente ferramentas necessárias (opcional)
-RUN npm install -g sequelize-cli nodemon ts-node
-
-# Copia todo o código fonte
+# Copie o restante dos arquivos do projeto
 COPY . .
 
-# Executa o build do projeto TypeScript
+# Compile o TypeScript
 RUN npm run build
 
-# Expõe a porta
+# Expõe a porta do servidor
 EXPOSE 8080
 
-# Define o comando de inicialização (executa o JavaScript gerado pelo build)
+# Comando para rodar o servidor em produção
 CMD ["npm", "start"]
