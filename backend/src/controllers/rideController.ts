@@ -3,6 +3,7 @@ import { calculateRoute, fetchRides } from '../services/rideService';
 import { getAllDrivers, getDriverById } from '../services/driverService';
 import { saveRide } from '../services/rideService';
 import Ride from '../models/Ride';
+import axios from 'axios';
 
 export const getTestMessage = (req: Request, res: Response): void => {
   res.send('Ride Routes');
@@ -77,69 +78,108 @@ export const estimateRide = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-// Confirm ride
 export const confirmRide = async (req: Request, res: Response): Promise<void> => {
   const { customer_id, origin, destination, distance, duration, driver, value } = req.body;
 
-  // Validações
   if (!origin || !destination) {
     res.status(400).json({
-      error_code: 'INVALID_DATA',
-      error_description: 'Os endereços de origem e destino não podem estar em branco.',
+      error_code: "INVALID_DATA",
+      error_description: "Os endereços de origem e destino não podem estar em branco.",
     });
     return;
   }
 
   if (!customer_id) {
     res.status(400).json({
-      error_code: 'INVALID_DATA',
-      error_description: 'O id do usuário não pode estar em branco.',
-    });
-    return;
-  }
-
-  if (origin === destination) {
-    res.status(400).json({
-      error_code: 'INVALID_DATA',
-      error_description: 'Os endereços de origem e destino não podem ser o mesmo.',
+      error_code: "INVALID_DATA",
+      error_description: "O id do usuário não pode estar em branco.",
     });
     return;
   }
 
   if (!driver || !driver.id) {
     res.status(400).json({
-      error_code: 'INVALID_DATA',
-      error_description: 'Uma opção de motorista válida deve ser informada.',
+      error_code: "INVALID_DATA",
+      error_description: "Uma opção de motorista válida deve ser informada.",
     });
     return;
   }
 
   try {
-    // Search for the selected driver by ID
-    const selectedDriver = await getDriverById(driver.id);
+    const parseCoordinates = (coordString: string) => {
+      const [latitude, longitude] = coordString.split(',').map(Number);
+      if (isNaN(latitude) || isNaN(longitude)) {
+        throw new Error(`Coordenadas inválidas: ${coordString}`);
+      }
+      return { latitude, longitude };
+    };
 
-    if (!selectedDriver) {
-      res.status(404).json({
-        error_code: 'DRIVER_NOT_FOUND',
-        error_description: 'Motorista não encontrado.',
+    const originCoords = parseCoordinates(origin);
+    const destinationCoords = parseCoordinates(destination);
+
+    if (
+      originCoords.latitude === destinationCoords.latitude &&
+      originCoords.longitude === destinationCoords.longitude
+    ) {
+      res.status(400).json({
+        error_code: "INVALID_DATA",
+        error_description: "Os endereços de origem e destino não podem ser o mesmo.",
       });
       return;
     }
 
-    // Validate distance
+    const getCityNameFromCoordinates = async (latitude: number, longitude: number): Promise<string> => {
+      const apiKey = process.env.GOOGLE_API_KEY;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+    
+      try {
+        const response = await axios.get(url);
+    
+        if (response.data.results.length > 0) {
+          const addressComponents = response.data.results[0].address_components;
+          const city =
+            addressComponents.find((component: any) =>
+              component.types.includes("locality")
+            )?.long_name ||
+            addressComponents.find((component: any) =>
+              component.types.includes("administrative_area_level_2")
+            )?.long_name;
+    
+          return city || "Desconhecido";
+        } else {
+          console.error("Nenhum resultado encontrado para as coordenadas:", latitude, longitude);
+          return "Desconhecido";
+        }
+      } catch (error: any) {
+        console.error("Erro ao obter o nome da cidade:", error.message || error);
+        return "Desconhecido";
+      }
+    };
+    const originCity = await getCityNameFromCoordinates(originCoords.latitude, originCoords.longitude);
+    const destinationCity = await getCityNameFromCoordinates(destinationCoords.latitude, destinationCoords.longitude);
+
+    const selectedDriver = await getDriverById(driver.id);
+
+    if (!selectedDriver) {
+      res.status(404).json({
+        error_code: "DRIVER_NOT_FOUND",
+        error_description: "Motorista não encontrado.",
+      });
+      return;
+    }
+
     if (distance < selectedDriver.minKm) {
       res.status(406).json({
-        error_code: 'INVALID_DISTANCE',
+        error_code: "INVALID_DISTANCE",
         error_description: `A distância informada (${distance} km) é menor que a distância mínima exigida pelo motorista (${selectedDriver.minKm} km).`,
       });
       return;
     }
 
-    // Save ride
     await saveRide({
       customer_id,
-      origin,
-      destination,
+      origin: originCity,
+      destination: destinationCity,
       distance,
       duration,
       driver_id: selectedDriver.id,
@@ -147,16 +187,16 @@ export const confirmRide = async (req: Request, res: Response): Promise<void> =>
       value,
     });
 
-    // Response to the client
     res.status(200).json({ success: true });
-  } catch (error) {
-    console.error('Erro ao confirmar a viagem:', error);
+  } catch (error: any) {
+    console.error("Erro ao confirmar a viagem:", error.message || error);
     res.status(500).json({
-      error_code: 'SERVER_ERROR',
-      error_description: 'Erro ao processar a solicitação. Tente novamente mais tarde.',
+      error_code: "SERVER_ERROR",
+      error_description: "Erro ao processar a solicitação. Tente novamente mais tarde.",
     });
   }
 };
+
 
 export const getRidesByCustomer = async (req: Request, res: Response): Promise<void> => {
   try {

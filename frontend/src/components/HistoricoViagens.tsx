@@ -122,25 +122,30 @@ const HistoricoViagens: React.FC = () => {
         <ul>
           {historico.map((viagem) => (
             <li key={viagem.id}>
-              <div>
+              <div className="details-ride">
                 <strong>Data e Hora:</strong> {viagem.data}
               </div>
-              <div>
+              <div className="details-ride">
                 <strong>Origem:</strong> {viagem.origem}
               </div>
-              <div>
+              <div className="details-ride">
                 <strong>Destino:</strong> {viagem.destino}
               </div>
-              <div>
+              <div className="details-ride">
                 <strong>Motorista:</strong> {viagem.motorista}
               </div>
-              <div>
-                <strong>Distância:</strong> {viagem.distancia} km
+              <div className="details-ride">
+                <strong>Distância:</strong>{" "}
+                {viagem.distancia.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                Km
               </div>
-              <div>
+              <div className="details-ride">
                 <strong>Tempo:</strong> {viagem.tempo}
               </div>
-              <div>
+              <div className="details-ride">
                 <strong>Valor:</strong> R${viagem.valor.toFixed(2)}
               </div>
             </li>
